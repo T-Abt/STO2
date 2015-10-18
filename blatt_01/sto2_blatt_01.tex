@@ -11,6 +11,7 @@
 \usepackage{array}
 \usepackage{stmaryrd}
 \usepackage{marvosym}
+\usepackage{hhline}
 \allowdisplaybreaks
 \usepackage[output-decimal-marker={,}]{siunitx}
 \usepackage[shortlabels]{enumitem}
@@ -72,9 +73,30 @@
 
     \item
         \begin{enumerate}[label=\alph*)]
-            \item
-
-            \item
+            \item Die erste Markov-Eigenschaft ist erfüllt, da im n+1-ten  Wurf entweder eine 6 gewürfelt wird oder nicht. Die Wahrscheinlichkeit für $ X_{n+1} = i_{n+1} $ hängt also nur vom Wert von $ X_{n} $  ab. Die Werte von Zufallsvariablen früherer Würfe haben auf die Wahrscheinlichkeit des n+1-ten Wurfs  keine Auswirkung, folglich gilt:\\\\
+            $ \mathbb{P} \left( X_{n+1}=i_{n+1}|X_{n}=i_{n},X_{n-1}=i_{n-1},...,X_{0}=i_{0}\left) = \mathbb{P} \left( X_{n+1}=i_{n+1}|X_{n}=i_{n} \left) $\\\\
+            Die zweite Markov-Eigenschaft ist nicht erfüllt. Zwar ist die Wahrscheinlichkeit eine 6 zu würfeln in jedem Wurf gleich groß, jedoch sind die Einschritt-Übergangswahrscheinlichkeiten nicht immer gleich. Sie hängen von n ab, denn $ X_{n} $ kann nur Werte annehmen, die kleiner gleich n sind, folglich gilt also nicht:\\\\
+            $ \mathbb{P} \left( X_{n+1}=j | X_{n} \left) = \mathbb{P} \left( X_{1} = j | X_{0} = i \left)$ \\\\
+            Es liegt keine Homogenität vor und damit ist $ (X)_{n\in\mathbb{N}} $ keine DTMC. 
+            \item Die erste Markov-Eigenschaft ist erfüllt, da im n+1-ten  Wurf entweder eine Zahl gewürfelt wird, die bisher die größte ist, oder nicht. Die Wahrscheinlichkeit für $ X_{n+1} = i_{n+1} $ hängt also nur vom Wert von $ X_{n} $ ab. Die Ergebnisse früherer Würfe haben auf die Wahrscheinlichkeit des n+1-ten Wurfs  keine Auswirkung, folglich gilt:\\\\
+            $ \mathbb{P} \left( X_{n+1}=i_{n+1}|X_{n}=i_{n},X_{n-1}=i_{n-1},...,X_{0}=i_{0}\left) = \mathbb{P} \left( X_{n+1}=i_{n+1}|X_{n}=i_{n} \left) $\\\\
+            Die zweite Markov-Eigenschaft ist erfüllt. Die Wahrscheinlichkeit im n+1-ten Wurf eine Zahl größer i zu würfeln ist genau so groß wie in jedem anderen Wurf. Die Einschritt-Übergangswahrscheinlichkeiten ist also immer gleich und hängt nicht von n ab. Folglich gilt:\\\\
+            $ \mathbb{P} \left( X_{n+1}=j | X_{n} \left) = \mathbb{P} \left( X_{1} = j | X_{0} = i \left)$ \\\\
+            Es liegt Homogenität vor und damit ist $ (X)_{n\in\mathbb{N}} $ eine DTMC.\\
+            Zustandsraum: $ \Omega = \{1,2,3,4,5,6\} $\\
+            Die Einschritt-Übergangs-Wahrscheinlichkeit:\\
+            \begin{tabular}[c]{|c||c|c|c|c|c|c|}
+            \hline
+			$ j\backslash i $&1&2&3&4&5&6\\\hhline{|=||=|=|=|=|=|=|}
+			1&$ \dfrac{1}{6} $&0&0&0&0&0\\\hline
+			2&$ \dfrac{1}{6} $&$ \dfrac{2}{6} $&0&0&0&0\\\hline
+			3&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{2} $&0&0&0\\\hline
+			4&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{2}{3} $&0&0\\\hline
+			5&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{5}{6} $&0\\\hline
+			6&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&$ \dfrac{1}{6} $&1\\\hline
+			\end{tabular}
+             
+            	
 
         \end{enumerate}
 
