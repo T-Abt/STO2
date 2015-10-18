@@ -24,8 +24,9 @@
 \newtheorem*{behaupt}{Behauptung}
 \newcommand{\gdw}{\Leftrightarrow}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\prob}{\mathbb{P}}
 \newcommand{\cov}{\operatorname{Cov}}
-\newcommand{\e}{\operatorname{E}}
+\newcommand{\e}{\mathbb{E}}
 \newcommand{\var}{\operatorname{Var}}
 \newcommand{\corr}{\operatorname{Corr}}
 
@@ -35,7 +36,7 @@
 \def \blattnr {1 }
 
 \lhead{Stochastik 2 - Blatt \blattnr}
-\rhead{Florian Abt, Lennart Braun, TODO}
+\rhead{Florian Abt, Lennart Braun, Sascha Schulz}
 \cfoot{\thepage}
 
 
@@ -44,7 +45,7 @@
 \author{
     Florian Abt (6524404), \\
     Lennart Braun (6523742), \\
-    TO DO (TODO)
+    Sascha Schulz (6434677)
 }
 \date{zum 20. Oktober 2015}
 
@@ -53,34 +54,204 @@
 
 \begin{enumerate}[label=\bfseries 1.\arabic*]
     \item
+        Die alternative Definition für die geometrische Verteilung sei
+        \begin{equation*}
+            \text{Geom}_p^0(k) = p(1-p)^k \qquad k \in \mathbb{N}_0 \text{.}
+        \end{equation*}
+        Es sei $Z$ eine Zufallsvariable mit $Z \sim \text{Geom}_p^0$.
         \begin{enumerate}[label=\alph*)]
             \item
+                Die alternative Definition der geometrischen Verteilung
+                $\text{Geom}_p^0$ beschreibt die Anzahl der fehlgeschlagenen
+                Experimente vor dem ersten erfolgreichen Experiment in einer
+                Bernoullikette.
 
             \item
+                Es sei $Y$ eine Zufallsvariable mit $Y \sim \text{Geom}_p$.              
+                \begin{equation*}
+		  \begin{split}
+                    Geom_p
+                    &= p(1-p)^{k-1} \\
+                    &= p(1-p)^k \cdot p(1-p)^{-1} \\
+                    &= \frac{1}{p(1-p)} p(1-p)^k \\
+                    &= \frac{1}{p(1-p)} Geom_p^0
+                  \end{split}
+                \end{equation*}
+                
+                Somit lässt sich der Zusammenhang erkennen, dass die Verteilungen korrelieren; 
+                die Werte von $Geom_p$ sind lediglich um den Faktor $\frac1{p(1-p)}$ zu $Geom_p^0$ skaliert.
+                
+                Dies lässt sich auch wie folgt ausdrücken:
+                \begin{equation*}
+                    \prob(Z=k) = p(1-p)^{k-1} = \prob(Y=k-1)
+                \end{equation*}
+                \begin{equation*}
+                    Z = Y + 1
+                \end{equation*}
+        \end{enumerate}
+
+    \item
+        Es sei $X \sim \text{Bin}_{n,p}$ eine binomialverteilte Zufallsvariable
+        mit den Parametern $n \in \mathbb{N}$ und $p \in [0,1]$.
+        \begin{enumerate}[label=\alph*)]
+            \item
+                Die Zufallsvariablen $X_i$ für $1 \leq i \leq n$, die den
+                Ausgang des $i$-ten Experiments anzeigen sind
+                bernoulliverteilt.  D.~h. $X_i$ bildet auf $\{0,1\}$ ab und es
+                gelten $\prob(X_i=1) = p$ sowie $\prob(X_i=0) = 1-p$
+                für alle $1 \leq i \leq n$.
+
+            \item
+                Sei $W \sim \text{Bin}_{m,p}$.
+
+                \begin{behaupt}
+                    Die Summe zweier binomialverteilten Zufallsvariablen ist
+                    wieder binomialverteilt:
+                    Es gilt $X + W \sim \text{Bin}_{n+m,p}$.
+                \end{behaupt}
+                \begin{proof}
+                    Die Behauptung lässt sich einmal heuristisch herleiten: $X$
+                    bzw. $W$ zeigt die Anzahl der Erfolge in $n$ bzw. $m$
+                    unabhängigen Zufallsexperimenten mit der
+                    Erfolgswahrscheinlichkeit $p$ an. Daher beschreibt die
+                    Summe $X + W$ die Anzahl der Erfolge in $n+m$ unabhängigen
+                    Experimenten mit Erfolgswahrscheinlichkeit $p$.
+
+                    Eine andere Möglichkeit:
+                    \begin{equation*}
+                        \begin{split}
+                            \prob(X+W=k)
+                            &= \prob \left( \bigcup_{j=0}^k \{X=j \land W=k-j\}
+                            \right) \\
+                            &= \sum_{j=0}^k \prob (\{X=j \land W=k-j\}) \\
+                            &= \sum_{j=0}^k \prob (X=j) \cdot \prob(W=k-j) \\
+                            &= \sum_{j=0}^k
+                            \binom{n}{j} \cdot p^j \cdot (1-p)^{n-j}
+                            \binom{m}{k-j} \cdot p^{k-j} \cdot (1-p)^{m-k+j} \\
+                            &= p^k \cdot (1-p)^{n+m-k} \cdot
+                            \sum_{j=0}^k \binom{n}{j} \cdot \binom{m}{k-j} \\
+                            &= \binom{n+m}{k} \cdot p^k \cdot (1-p)^{n+m-k} \\
+                            &= \text{Bin}_{(n+m),p}
+                        \end{split}
+                    \end{equation*}
+                \end{proof}
+
+            \item
+                \begin{behaupt}
+                    Der Erwartungswert einer binomialverteilten Zufallsvariable
+                    $X \sim \text{Bin}_{n,p}$ ist $\e[X] = n \cdot p$.
+                \end{behaupt}
+                \begin{proof}
+                    $X$ lässt sich als Summe von Indikatorzufallsvariablen
+                    schreiben, die jeweils den Ausgang eines Elements anzeigen:
+                    $X = \sum_{i=1}^n X_i$ mit $X_i \sim \text{Bin}_{1,p}$.
+                    Für die $X_i$ gilt jeweils
+                    \begin{equation*}
+                        \e[X_i] = 0 \cdot \prob(X_i=0) + 1 \cdot \prob(X_i=1)
+                        = p \text{ .}
+                    \end{equation*}
+                    Aus der Linearität des Erwartungswertes folgt:
+                    \begin{equation*}
+                        \begin{split}
+                            \e[X]
+                            &= \e\left[\sum_{i=0}^n X_i\right] \\
+                            &= \sum_{i=0}^n \e[X_i] \\
+                            &= \sum_{i=0}^n p \\
+                            &= n \cdot p
+                        \end{split}
+                    \end{equation*}
+                \end{proof}
 
         \end{enumerate}
 
     \item
+        Ein fairer Würfel wird wiederholt geworfen.
         \begin{enumerate}[label=\alph*)]
             \item
+                Die Zufallsvariable $X_n$ sei die Anzahl der Sechsen in den
+                ersten $n$ Würfen.
+
+                \begin{behaupt}
+                    $(X_n)_{n \in \N_0}$ ist eine DTMC.
+                \end{behaupt}
+                \begin{proof}
+                    Der Zustandsraum ist die Menge der natürlichen Zahlen
+                    inklusive der $0$, $\N_0$, da die Zufallsvariablen Anzahlen
+                    angeben.
+
+                    Die Wahrscheinlichkeit, dass $X_n$ den Zustand $j \in \N_0$
+                    annimmt, ist nur von dem Zustand $X_{n-1}$ abhängig ($n \in
+                    \N$).  Dabei unterscheiden wir drei Fälle: Wird im $n$-ten
+                    Wurf eine Sechs gewürfelt (Wahrscheinlichkeit
+                    $\nicefrac{1}{6}$), wird die Anzahl ewürfelter Sechsen
+                    inkrementiert ($X_n = X_{n-1}+1$). Bei allen anderen
+                    Augenzahlen (Wahrscheinlichkeit $\nicefrac{5}{6}$) bleibt
+                    die Anzahl gewürfelter Sechsen unverändert ($X_n =
+                    X_{n-1}$).  Weiterhin kann die Anzahl gewürfelter Sechsen
+                    nicht verringert oder um mehr als $1$ erhöht werden.
+                    Derartige Übergänge sind also ausgeschlossen.
+                    Für die Einschritt-Übergangswahrscheinlichkeiten gilt also
+                    \begin{equation*}
+                        p_{ij} = \prob(X_1=j \ |\  X_0=i) =
+                        \begin{cases}
+                            \nicefrac{1}{6} & \text{if } j = i + 1 \\
+                            \nicefrac{5}{6} & \text{if } j = i \\
+                            0 & \text{else}
+                        \end{cases}
+                        \qquad
+                        \forall i,j \in N_0
+                        \text{ .}
+                    \end{equation*}
+                    Da bei $0$ Würfen noch keine Sechs gefallen sein kann, gilt
+                    $\prob(X_0 = 0) = 1$.
+                    Damit ist $(X_n)_{n \in \N_0}$ eine Markov-Kette.
+                \end{proof}
 
             \item
+                Die Zufallsvariable $X_n$ sei die größte gewürfelte Augenzahl
+                während der ersten $n$ Würfe.
+                Da ein Maximum über $0$ Ergebnisse nicht wohldefiniert ist,
+                betrachten wir die Folge $(X_n)_{n \in \N}$ (ohne $X_0$) und
+                untersuchen, ob diese eine DTMC gemäß Definition 1.2.1 ist mit
+                der Änderung, dass die Indizes auch mit $1$ beginnen dürfen.
 
-            \item
+                \begin{behaupt}
+                    $(X_n)_{n \in \N}$ ist eine DTMC.
+                \end{behaupt}
+                \begin{proof}
+                    Der Zustandsraum ist $Z = \{1, \dotsc, 6\}$.
 
-        \end{enumerate}
-
-    \item
-        \begin{enumerate}[label=\alph*)]
-            \item
-
-            \item
+                    Die Wahrscheinlichkeit, dass $X_n$ den Zustand $j \in Z$
+                    annimmt, ist nur von dem Zustand $X_{n-1}$ abhängig ($n \in
+                    \N \land n > 1$).  Es sind wieder drei Fälle zu
+                    unterscheiden: Wird eine Zahl kleiner oder gleich dem
+                    bisherigen Maximum $i$ gewürfelt (Wahrscheinlichkeit
+                    $\nicefrac{i}{6}$) ändert sich das Maximum nicht. Für jede
+                    gewürfelte Zahl $j > i$ (jeweils Wahrscheinlichkeit
+                    $\nicefrac{1}{6}$) wird das neue Maximum auf $j$ gesetzt.
+                    Da das neue Maximum nicht kleiner als das bisherige sein
+                    kann, sind solche Übergänge ausgeschlossen.
+                    Für die Einschritt-Übergangswahrscheinlichkeiten gilt also
+                    \begin{equation*}
+                        p_{ij} = \prob(X_2=j \ |\  X_1=i) =
+                        \begin{cases}
+                            \nicefrac{1}{6} & \text{if } j > i \\
+                            \nicefrac{i}{6} & \text{if } j = i \\
+                            0 & \text{if } j < i
+                        \end{cases}
+                        \qquad
+                        \forall i,j \in \{1,2, \dotsc, 6\}
+                    \end{equation*}
+                    Das erste Element der Folge $X_1$ nimmt die Werte
+                    gleichverteilt über $\{1,2, \dotsc, 6\}$ an.
+                    Damit ist $(X_n)_{n \in \N}$ eine Markov-Kette.
+                \end{proof}
 
         \end{enumerate}
 
     \item
         Die Zufallsvariable $W$ habe Werte in $\mathbb{N}$ und erfülle
-        $\mathbb{P}(W = k \ |\  W > n) = \mathbb{P}(W = k-n)$ für alle
+        $\prob(W = k \ |\  W > n) = \prob(W = k-n)$ für alle
         $n \in \mathbb{N}_0$ und für alle $k \in \{n+1, n+2, \dotsc\}$.
 
         \begin{behaupt}
